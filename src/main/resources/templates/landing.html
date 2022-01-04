@@ -3,94 +3,224 @@
 <div th:replace="fragments/head :: head(#{${page.pageTitle}})"></div>
 <body class="locale-en" id="landing-page">
 <div class="page-wrapper">
-  <div th:replace="fragments/toolbar :: toolbar"></div>
-  <div th:replace="fragments/demoBanner :: demoBanner"></div>
-  <main id="content" role="main">
-    <section class="slab slab--white padding-top-1rem padding-bottom-3rem">
+  <div class="demo-banner">
+    This site is for example purposes only. If you need to submit a change report, visit <a
+      class="link--subtle" href=" https://coloradopeak.secure.force.com">PEAK</a>.
+  </div>
+
+  <section class="slab--hero-1 slab slab--hero">
+    <div class="hero--cta-options">
       <div class="grid">
         <div class="grid__item width-one-half">
-          <div class="spacing-above-35">
-            <img src="/images/mn-logo-horizontal-rgb.png" alt="" class="mn-logo">
-          </div>
-          <h1 class="spacing-below-35" th:text="#{landing.header}"></h1>
-          <p class="text-25 spacing-below-15" th:text="#{landing.subheader}"></p>
-          <div class="spacing-above-15 spacing-below-0">
-            <a href="#later-docs-upload">
-              <span th:text="#{landing.alread-applied}"></span>
-            </a>
-          </div>
-          <a class="button button--primary spacing-below-0 spacing-above-45"
-             th:href="'/pages/'+${pageName}+'/navigation?lang=' + ${#locale.language}">
-            <span th:text="#{landing.apply-now}"></span>
-            <div th:replace="fragments/icons/icon-arrow :: icon-arrow"></div>
-          </a>
-          <!--Add button to apply now in Spanish-->
-          <div class="spacing-above-45"
-               th:with="otherLocal=${#locale.toString().equals('en') ? 'es' : 'en'}">
-            <a class="button button--small"
-               th:href="'/pages/'+${pageName}+'/navigation?lang=' + ${otherLocal}">
-              <span th:text="#{landing.apply-now-espanol}"></span>
-              <div th:replace="fragments/icons/icon-arrow-black :: icon-arrow-black"></div>
-            </a>
-          </div>
+          <h1>
+            Report changes to your benefits case
+          </h1>
+
+          <div>
+            <a th:href="'/pages/'+${pageName}+'/navigation?lang=' + ${#locale.language}">
+              <button class="button button--large button--cta">Start my report <i
+                  class="button__icon icon-arrow_forward"></i></button>
+            </a></div>
+
+          <p>
+          <span
+              data-intro="Set expectations for the client by telling them how long the process will take."
+              data-position="bottom">It only takes 10 minutes</span>
+          </p>
 
         </div>
-        <div class="grid__item width-one-half">
-          <img src="/images/minnesota-splash.png" alt="" class="splash">
-        </div>
-      </div>
-    </section>
-    <section class="slab slab--minnesota-sky-blue">
-      <div class="grid">
-        <h1 class="h2 spacing-below-60 text--centered"
-            th:text="#{landing.apply-to-these-programs}"></h1>
-        <div class="grid__item width-five-twelfths">
-          <div class="grid__item spacing-below-35">
-            <h2 class="h3 spacing-below-10" th:text="#{landing.food-assistance-SNAP}"></h2>
-            <p class="form-card__body-text"
-               th:text="#{landing.SNAP-helps-low-income-Minnesotans-get-the-food-they-need}"></p>
+        <div class="grid__item width-one-half is-tablet-hidden--inline vertical-line">
+          <div class="grid__item text--small width-one-half">
+            <p class="h4">Supported programs:</p>
+            <ul data-intro="Clients don't always know which benefits they're enrolled in, or may call them by different names. An integrated system allows clients to report changes without having to identify their benefit."
+                data-position="right">
+              <li><i class="icon-done"></i> SNAP (food stamps)</li>
+              <li><i class="icon-done"></i> Medicaid</li>
+              <li><i class="icon-done"></i> ColoradoWorks</li>
+              <li><i class="icon-done"></i> Adult Financial</li>
+            </ul>
           </div>
-          <div class="grid__item spacing-below-35">
-            <h2 class="h3 spacing-below-10" th:text="#{landing.cash-programs}"></h2>
-            <p class="form-card__body-text"
-               th:text="#{landing.cash-assistance-helps-people-meet-their-basic-needs-until-they-are-able}"></p>
-            <ul class="text--small list--bulleted padding-left-20">
-              <li th:text="#{landing.diversionary-work-program-DWP}"></li>
-              <li th:text="#{landing.general-assistance}"></li>
-              <li th:text="#{landing.mn-family-investment-program-mfip}"></li>
-              <li th:text="#{landing.mn-supplemental-aid-msa}"></li>
-              <li th:text="#{landing.refugee-cash-assistance-rca}"></li>
+          <div class="grid__item text--small width-one-half">
+            <p class="h4">Report changes in:</p>
+            <ul>
+              <li><i class="icon-done"></i> Employment</li>
+              <li><i class="icon-done"></i> Hours</li>
+              <li><i class="icon-done"></i> Pay</li>
             </ul>
           </div>
         </div>
-        <div class="grid__item width-five-twelfths shift-one-twelfth">
-          <div class="grid__item spacing-below-35">
-            <h2 class="h3 spacing-below-10" th:text="#{landing.emergency-assistance}"></h2>
-            <p class="form-card__body-text"
-               th:text="#{landing.emergency-assistance-provides-something-to-people-this-is-a-description}"></p>
-          </div>
-          <div class="grid__item spacing-below-35">
-            <h2 class="h3 spacing-below-10" th:text="#{landing.housing-support}"></h2>
-            <p class="form-card__body-text"
-               th:text="#{landing.the-housing-support-program}"></p>
-          </div>
-          <div class="grid__item spacing-below-35">
-            <h2 class="h3 spacing-below-10" th:text="#{landing.child-care-assistance}"></h2>
-            <p class="form-card__body-text"
-               th:utext="#{landing.child-care-assistance-provides-financial-assistance-to-help-families}"></p>
-          </div>
-        </div>
       </div>
-    </section>
-    <section id="later-docs-upload" class="slab text--centered">
-      <div th:replace="fragments/icons/icon-upload-documents :: icon-upload-documents"></div>
-      <h1 class="max-width-446 h2 spacing-below-25 margin-left-right-auto spacing-above-10"
-          th:text="#{landing.submit-documents-to-county}"></h1>
-      <a class="button spacing-below-0" th:href="'/pages/identifyCounty'">
-        <span th:text="#{landing.upload-documents}"></span>
-      </a>
-    </section>
-  </main>
+    </div>
+  </section>
+
+  <section class="slab slab--white">
+    <div class="grid is-desktop-hidden--inline">
+      <div class="grid__item text--small width-one-half">
+        <p class="h4">Supported programs:</p>
+        <ul class="list--padded">
+          <li><i class="icon-done"></i> SNAP (food stamps)</li>
+          <li><i class="icon-done"></i> Medicaid</li>
+          <li><i class="icon-done"></i> ColoradoWorks</li>
+          <li><i class="icon-done"></i> Adult Financial</li>
+        </ul>
+      </div>
+      <br/>
+      <div class="grid__item text--small width-one-half">
+        <p class="h4">Report changes in:</p>
+        <ul class="list--padded">
+          <li><i class="icon-done"></i> Employment</li>
+          <li><i class="icon-done"></i> Hours</li>
+          <li><i class="icon-done"></i> Pay</li>
+        </ul>
+      </div>
+    </div>
+
+    <hr class="is-desktop-hidden"/>
+
+    <div class="grid">
+      <div class="grid__item width-full">
+        <p class="h3">
+          If your income increases by a certain amount you need to report the change to your
+          benefits case. If your income falls or your expenses increase, you may be eligible for
+          more benefits.
+        </p>
+        <p class="h3">
+          <a href="/screens/how-it-works">Start your report</a> now.
+          We’ll guide you through the process with simple step-by-step directions.
+        </p>
+      </div>
+    </div>
+  </section>
+
+
+  <section class="slab slab--white is-desktop-hidden--inline">
+    <div class="vertical-steps text--centered">
+      <div class="vertical-steps__step">
+        <div class="emoji emoji--med emoji--memo"></div>
+        <p class="text--small with-padding-small">You’ll fill out a form about the change and
+          provide proof.</p>
+      </div>
+      <div class="vertical-steps__step">
+        <div class="emoji emoji--med emoji--woman-office-worker"></div>
+        <p class="text--small with-padding-small">The county reviews your case and figures out if
+          your benefits need to change.</p>
+      </div>
+      <div class="vertical-steps__step">
+        <div class="emoji emoji--med emoji--envelope-with-arrow"></div>
+        <p class="text--small with-padding-small">If your benefits change, you'll be notified.</p>
+      </div>
+    </div>
+
+  </section>
+
+  <section class="slab slab--off-white is-tablet-hidden--inline">
+    <div class="grid">
+      <div class="grid__item text--small width-one-third center">
+        <div class="emoji emoji--med emoji--memo"></div>
+        <p class="text--small with-padding-small">You’ll fill out a form about the change and
+          provide proof.</p>
+      </div>
+      <div class="grid__item text--small width-one-third center">
+        <div class="emoji emoji--med emoji--woman-office-worker"></div>
+        <p class="text--small with-padding-small">The county reviews your case and figures out if
+          your benefits need to change.</p>
+      </div>
+      <div class="grid__item text--small width-one-third center">
+        <div class="emoji emoji--med emoji--envelope-with-arrow"></div>
+        <p class="text--small with-padding-small">If your benefits change, you'll be notified.</p>
+      </div>
+    </div>
+  </section>
+
+
+  <!--  <div th:replace="fragments/toolbar :: toolbar"></div>-->
+  <!--  <div th:replace="fragments/demoBanner :: demoBanner"></div>-->
+  <!--  <main id="content" role="main">-->
+  <!--    <section class="slab slab&#45;&#45;white padding-top-1rem padding-bottom-3rem">-->
+  <!--      <div class="grid">-->
+  <!--        <div class="grid__item width-one-half">-->
+  <!--          <div class="spacing-above-35">-->
+  <!--            <img src="/images/mn-logo-horizontal-rgb.png" alt="" class="mn-logo">-->
+  <!--          </div>-->
+  <!--          <h1 class="spacing-below-35" th:text="#{landing.header}"></h1>-->
+  <!--          <p class="text-25 spacing-below-15" th:text="#{landing.subheader}"></p>-->
+  <!--          <div class="spacing-above-15 spacing-below-0">-->
+  <!--            <a href="#later-docs-upload">-->
+  <!--              <span th:text="#{landing.alread-applied}"></span>-->
+  <!--            </a>-->
+  <!--          </div>-->
+  <!--          <a class="button button&#45;&#45;primary spacing-below-0 spacing-above-45"-->
+  <!--             th:href="'/pages/'+${pageName}+'/navigation?lang=' + ${#locale.language}">-->
+  <!--            <span th:text="#{landing.apply-now}"></span>-->
+  <!--            <div th:replace="fragments/icons/icon-arrow :: icon-arrow"></div>-->
+  <!--          </a>-->
+  <!--          &lt;!&ndash;Add button to apply now in Spanish&ndash;&gt;-->
+  <!--          <div class="spacing-above-45"-->
+  <!--               th:with="otherLocal=${#locale.toString().equals('en') ? 'es' : 'en'}">-->
+  <!--            <a class="button button&#45;&#45;small"-->
+  <!--               th:href="'/pages/'+${pageName}+'/navigation?lang=' + ${otherLocal}">-->
+  <!--              <span th:text="#{landing.apply-now-espanol}"></span>-->
+  <!--              <div th:replace="fragments/icons/icon-arrow-black :: icon-arrow-black"></div>-->
+  <!--            </a>-->
+  <!--          </div>-->
+
+  <!--        </div>-->
+  <!--        <div class="grid__item width-one-half">-->
+  <!--          <img src="/images/minnesota-splash.png" alt="" class="splash">-->
+  <!--        </div>-->
+  <!--      </div>-->
+  <!--    </section>-->
+  <!--    <section class="slab slab&#45;&#45;minnesota-sky-blue">-->
+  <!--      <div class="grid">-->
+  <!--        <h1 class="h2 spacing-below-60 text&#45;&#45;centered"-->
+  <!--            th:text="#{landing.apply-to-these-programs}"></h1>-->
+  <!--        <div class="grid__item width-five-twelfths">-->
+  <!--          <div class="grid__item spacing-below-35">-->
+  <!--            <h2 class="h3 spacing-below-10" th:text="#{landing.food-assistance-SNAP}"></h2>-->
+  <!--            <p class="form-card__body-text"-->
+  <!--               th:text="#{landing.SNAP-helps-low-income-Minnesotans-get-the-food-they-need}"></p>-->
+  <!--          </div>-->
+  <!--          <div class="grid__item spacing-below-35">-->
+  <!--            <h2 class="h3 spacing-below-10" th:text="#{landing.cash-programs}"></h2>-->
+  <!--            <p class="form-card__body-text"-->
+  <!--               th:text="#{landing.cash-assistance-helps-people-meet-their-basic-needs-until-they-are-able}"></p>-->
+  <!--            <ul class="text&#45;&#45;small list&#45;&#45;bulleted padding-left-20">-->
+  <!--              <li th:text="#{landing.diversionary-work-program-DWP}"></li>-->
+  <!--              <li th:text="#{landing.general-assistance}"></li>-->
+  <!--              <li th:text="#{landing.mn-family-investment-program-mfip}"></li>-->
+  <!--              <li th:text="#{landing.mn-supplemental-aid-msa}"></li>-->
+  <!--              <li th:text="#{landing.refugee-cash-assistance-rca}"></li>-->
+  <!--            </ul>-->
+  <!--          </div>-->
+  <!--        </div>-->
+  <!--        <div class="grid__item width-five-twelfths shift-one-twelfth">-->
+  <!--          <div class="grid__item spacing-below-35">-->
+  <!--            <h2 class="h3 spacing-below-10" th:text="#{landing.emergency-assistance}"></h2>-->
+  <!--            <p class="form-card__body-text"-->
+  <!--               th:text="#{landing.emergency-assistance-provides-something-to-people-this-is-a-description}"></p>-->
+  <!--          </div>-->
+  <!--          <div class="grid__item spacing-below-35">-->
+  <!--            <h2 class="h3 spacing-below-10" th:text="#{landing.housing-support}"></h2>-->
+  <!--            <p class="form-card__body-text"-->
+  <!--               th:text="#{landing.the-housing-support-program}"></p>-->
+  <!--          </div>-->
+  <!--          <div class="grid__item spacing-below-35">-->
+  <!--            <h2 class="h3 spacing-below-10" th:text="#{landing.child-care-assistance}"></h2>-->
+  <!--            <p class="form-card__body-text"-->
+  <!--               th:utext="#{landing.child-care-assistance-provides-financial-assistance-to-help-families}"></p>-->
+  <!--          </div>-->
+  <!--        </div>-->
+  <!--      </div>-->
+  <!--    </section>-->
+  <!--    <section id="later-docs-upload" class="slab text&#45;&#45;centered">-->
+  <!--      <div th:replace="fragments/icons/icon-upload-documents :: icon-upload-documents"></div>-->
+  <!--      <h1 class="max-width-446 h2 spacing-below-25 margin-left-right-auto spacing-above-10"-->
+  <!--          th:text="#{landing.submit-documents-to-county}"></h1>-->
+  <!--      <a class="button spacing-below-0" th:href="'/pages/identifyCounty'">-->
+  <!--        <span th:text="#{landing.upload-documents}"></span>-->
+  <!--      </a>-->
+  <!--    </section>-->
+  <!--  </main>-->
 </div>
 <div th:replace="fragments/footer :: footer"></div>
 </body>
