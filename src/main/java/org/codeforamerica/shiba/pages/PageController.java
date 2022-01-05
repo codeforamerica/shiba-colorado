@@ -394,6 +394,8 @@ public class PageController {
                       applicationData.getSubworkflows())));
       model.put("data", pagesData
           .getPageDataOrDefault(pageTemplate.getName(), pageWorkflow.getPageConfiguration()));
+      model.put("pagesData", pagesData);
+      model.put("workflow", pageWorkflow);
     }
 
     return model;

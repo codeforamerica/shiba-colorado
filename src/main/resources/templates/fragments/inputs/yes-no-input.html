@@ -8,7 +8,7 @@
 >
     <div class="form-group" th:with="helpMessageID=${hasHelpMessage ? ' ' + input.name + '-help-message' : ''},
                                      promptMessageFragment=${hasPromptMessageFragment ? ' ' + input.promptMessage.getPromptMessageFragmentName() : ''},
-                                     promptMessageKey=${hasPromptMessageKey ? ' ' + input.promptMessage.getPromptMessageKey() : ''}">
+                                     promptMessageKey=${hasPromptMessageKey ? ' ' + input.promptMessage.getPromptMessageKey().getDefaultValue() : ''}">
         <div class="spacing-below-60">
             <div th:replace="fragments/form-question-prompt :: formQuestionPrompt(${input})"></div>
             <p class="text--help"

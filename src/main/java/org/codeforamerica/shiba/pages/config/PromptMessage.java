@@ -6,5 +6,5 @@ import lombok.Data;
 public class PromptMessage {
 
   private String promptMessageFragmentName;
-  private String promptMessageKey;
+  private Value promptMessageKey;
 }

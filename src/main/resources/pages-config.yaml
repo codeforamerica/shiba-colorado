@@ -4,6 +4,10 @@ conditionDefinitions:
     pageName: choosePrograms
     input: programs
     value: NONE
+  - &applyingForSomeoneElse?
+    pageName: whoHadChange
+    input: whoHadChange
+    value: someoneElse
   - &livesAlone?
     pageName: addHouseholdMembers
     input: addHouseholdMembers
@@ -226,6 +230,139 @@ pageDefinitions:
     name: landing
     pageTitle: landing.title
     usingPageTemplateFragment: false
+  - &howItWorks
+    name: howItWorks
+    pageTitle: how-it-works.title
+    headerKey: how-it-works.header-key
+    primaryButtonTextKey: how-it-works.button
+  - &whatIsYourZipCode
+    name: whatIsYourZipCode
+    pageTitle: what-is-your-zip-code.title
+    headerKey: what-is-your-zip-code.header-key
+    headerHelpMessageKey: what-is-your-zip-code.header-help-message-key
+    subtleLinkTextKey: what-is-your-zip-code.subtle-link
+    inputs:
+      - name: zipCode
+        type: TEXT
+        validators:
+          - validation: ZIPCODE
+            errorMessageKey: general.validation.make-sure-to-enter-a-zip-code-with-5-digits
+  - &whatCountyDoYouLiveIn
+    name: whatCountyDoYouLiveIn
+    pageTitle: what-county-do-you-live-in.title
+    headerKey: what-county-do-you-live-in.header-key
+    headerHelpMessageKey: what-county-do-you-live-in.header-help-message-key
+    subtleLinkTextKey: what-county-do-you-live-in.subtle-link
+    inputs:
+      - name: county
+        type: SELECT
+        options:
+          selectableOptions:
+            - value: Arapahoe
+              messageKey: what-county-do-you-live-in.arapahoe
+            - value: Denver
+              messageKey: what-county-do-you-live-in.denver
+            - value: Garfield
+              messageKey: what-county-do-you-live-in.garfield
+            - value: Pitkin
+              messageKey: what-county-do-you-live-in.pitkin
+            - value: Not listed
+              messageKey: what-county-do-you-live-in.not-listed
+  - &changeType
+    name: changeType
+    pageTitle: change-type.title
+    headerKey: change-type.header-key
+    headerHelpMessageKey: change-type.header-help-message-key
+    inputs:
+      - name: changeType
+        type: RADIO
+        options:
+          selectableOptions:
+            - value: jobEnded
+              messageKey: change-type.job-ended
+            - value: newJob
+              messageKey: change-type.new-job
+            - value: hoursOrPayChanged
+              messageKey: change-type.hours-or-pay-changed
+  - &whoHadChange
+    name: whoHadChange
+    pageTitle: who-had-change.title
+    headerKey: who-had-change.header
+    inputs:
+      - name: whoHadChange
+        type: RADIO
+        options:
+          selectableOptions:
+            - value: me
+              messageKey: who-had-change.me
+            - value: someoneElse
+              messageKey: who-had-change.someone-else
+  - &clientInfo
+    name: clientInfo
+    pageTitle:
+      defaultValue: client-info.title-self
+      conditionalValues:
+        - value: client-info.title-someone-else
+          condition: *applyingForSomeoneElse?
+    headerKey:
+      defaultValue: client-info.title-self
+      conditionalValues:
+        - value: client-info.title-someone-else
+          condition: *applyingForSomeoneElse?
+    inputs:
+      - name: firstName
+        type: TEXT
+        promptMessage:
+          promptMessageKey:
+            defaultValue: client-info.what-is-your-first-name
+            conditionalValues:
+              - value: client-info.what-is-their-first-name
+                condition: *applyingForSomeoneElse?
+        helpMessageKey:
+          defaultValue: client-info.as-it-appears-on-your-id
+          conditionalValues:
+            - value: client-info.as-it-appears-on-their-id
+              condition: *applyingForSomeoneElse?
+      - name: lastName
+        type: TEXT
+        promptMessage:
+          promptMessageKey:
+            defaultValue: client-info.what-is-your-last-name
+            conditionalValues:
+              - value: client-info.what-is-their-last-name
+                condition: *applyingForSomeoneElse?
+        helpMessageKey:
+          defaultValue: client-info.as-it-appears-on-your-id
+          conditionalValues:
+            - value: client-info.as-it-appears-on-their-id
+              condition: *applyingForSomeoneElse?
+      - name: dateOfBirth
+        type: DATE
+        validators:
+          - validation: DATE
+            errorMessageKey: general.validation.please-enter-your-birthday-in-this-format
+            condition:
+              input: dateOfBirth
+              matcher: NOT_EMPTY
+          - validation: DOB_VALID
+            condition:
+              input: dateOfBirth
+              matcher: NOT_EMPTY
+            errorMessageKey: general.validation.make-sure-to-provide-a-dob-between-1900-and-present
+        promptMessage:
+          promptMessageKey:
+            defaultValue: client-info.what-is-your-dob
+            conditionalValues:
+              - value: client-info.what-is-their-dob
+                condition: *applyingForSomeoneElse?
+      - name: caseNumber
+        type: TEXT
+        promptMessage:
+          promptMessageKey:
+            defaultValue: client-info.what-is-your-case-number
+            conditionalValues:
+              - value: client-info.what-is-their-case-number
+                condition: *applyingForSomeoneElse?
   - &goToApplyMn
     name: goToApplyMn
     pageTitle: go-to-apply-mn.title
@@ -2928,7 +3065,36 @@ workflow:
   landing:
     pageConfiguration: *landing
     nextPages:
-      - pageName: identifyCountyBeforeApplying
+      - pageName: howItWorks
+#      - pageName: identifyCountyBeforeApplying
+  howItWorks:
+    pageConfiguration: *howItWorks
+    nextPages:
+      - pageName: whatIsYourZipCode
+  whatIsYourZipCode:
+    pageConfiguration: *whatIsYourZipCode
+    nextPages:
+      - pageName: changeType
+    subtleLinkTargetPage: whatCountyDoYouLiveIn
+  whatCountyDoYouLiveIn:
+    pageConfiguration: *whatCountyDoYouLiveIn
+    nextPages:
+      - pageName: changeType
+    subtleLinkTargetPage: whatIsYourZipCode
+  changeType:
+    pageConfiguration: *changeType
+    nextPages:
+      - pageName: whoHadChange
+  whoHadChange:
+    pageConfiguration: *whoHadChange
+    nextPages:
+      - pageName: clientInfo
+  clientInfo:
+    pageConfiguration: *clientInfo
+    nextPages:
+      - pageName: prepareToApply
+    datasources:
+      - pageName: whoHadChange
   identifyCountyBeforeApplying:
     pageConfiguration: *identifyCounty
     nextPages:
@@ -4239,6 +4405,7 @@ pageGroups:
     startingCount: 1
 landmarkPages:
   startTimerPages: # "the first page" of a flow, where we set applicationData.startTime
+    - howItWorks
     - identifyCountyBeforeApplying
     - identifyCounty
   inProgressStatusPages: # Set application status to "in_progress"

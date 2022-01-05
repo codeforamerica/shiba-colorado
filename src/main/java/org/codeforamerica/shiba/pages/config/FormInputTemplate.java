@@ -6,6 +6,7 @@ import static org.codeforamerica.shiba.pages.config.FormInputType.RADIO;
 import java.util.List;
 import lombok.Value;
 
+
 @Value
 public class FormInputTemplate {
 
@@ -13,7 +14,7 @@ public class FormInputTemplate {
   String name;
   String customInputFragment;
   PromptMessage promptMessage;
-  String helpMessageKey;
+  org.codeforamerica.shiba.pages.config.Value helpMessageKey;
   String placeholder;
   List<String> validationErrorMessageKeys;
   OptionsWithDataSourceTemplate options;

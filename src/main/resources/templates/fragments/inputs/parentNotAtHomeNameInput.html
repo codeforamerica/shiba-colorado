@@ -17,7 +17,7 @@
         <label class="form-question spacing-below-5" th:for="${childId}"
                th:text="${childId.contains('applicant') ? me : childName}">
         </label>
-        <p th:text="#{${input.promptMessage.promptMessageKey}}"></p>
+        <p th:text="#{${input.promptMessage.promptMessageKey.getDefaultValue()}}"></p>
         <input type="text"
                class="text-input form-width--medium"
                th:readonly="${input.readOnly}"

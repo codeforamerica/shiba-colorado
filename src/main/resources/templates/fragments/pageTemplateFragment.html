@@ -31,6 +31,13 @@
             </div>
             <p th:if="${page.hasCardFooterTextKey()}" id="card-footer" class="spacing-below-60"
                th:text="#{${page.cardFooterTextKey}}"></p>
+
+            <div class="spacing-below-35">
+              <a th:if="${page.hasSubtleLinkTextKey()}" class="link--subtle" id="subtle-link"
+                 th:href="|/pages/${page.subtleLinkTargetPage}|"
+                 th:text="#{${page.subtleLinkTextKey}}"></a>
+            </div>
+
             <button id="form-submit-button" th:if="${page.hasPrimaryButton}"
                     class="button button--primary"
                     type="submit"
@@ -46,9 +53,6 @@
                th:href="'/pages/'+${pageName}+'/navigation?option=0'"
                th:text="#{${page.primaryButtonTextKey}}"></a>
           </div>
-          <a th:if="${page.hasSubtleLinkTextKey()}" class="link--subtle" id="subtle-link"
-             th:href="|/pages/${page.subtleLinkTargetPage}|"
-             th:text="#{${page.subtleLinkTextKey}}"></a>
         </div>
       </main>
     </div>

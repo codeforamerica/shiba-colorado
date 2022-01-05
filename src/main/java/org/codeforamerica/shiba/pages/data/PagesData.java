@@ -111,7 +111,7 @@ public class PagesData extends HashMap<String, PageData> {
    * Defaults to {@code value.getDefaultValue()} if all {@code value.getConditionalValues()} and
    * flags evaluate to "false".
    */
-  private String resolve(FeatureFlagConfiguration featureFlags,
+  public String resolve(FeatureFlagConfiguration featureFlags,
       PageWorkflowConfiguration pageWorkflowConfiguration,
       Value value) {
     if (value == null) {
