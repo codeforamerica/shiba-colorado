@@ -284,6 +284,9 @@ pageDefinitions:
               messageKey: change-type.new-job
             - value: hoursOrPayChanged
               messageKey: change-type.hours-or-pay-changed
+        validators:
+          - validation: SELECT_AT_LEAST_ONE
+            errorMessageKey: general.validation.make-sure-you-answer-this-question
   - &whoHadChange
     name: whoHadChange
     pageTitle: who-had-change.title
@@ -388,13 +391,47 @@ pageDefinitions:
               input: ssn
               matcher: NOT_EMPTY
       - name: phoneNumber
-        type: TEXT
+        type: PHONE
         promptMessage:
           promptMessageKey:
             defaultValue: client-info.what-is-your-phone-number
             conditionalValues:
               - value: client-info.what-is-their-phone-number
                 condition: *applyingForSomeoneElse?
+        validators:
+          - validation: PHONE_STARTS_WITH_ONE
+            errorMessageKey: general.validation.area-codes-can-not-begin-with-1
+            condition:
+              input: phoneNumber
+              matcher: NOT_EMPTY
+          - validation: PHONE
+            errorMessageKey: general.validation.make-sure-to-enter-a-phone-number-with-10-digits
+            condition:
+              input: phoneNumber
+              matcher: NOT_EMPTY
+  - &tellUsAboutTheLostJob
+    name: tellUsAboutTheLostJob
+    pageTitle: lost-job.tell-us-about-the-job-that-ended
+    headerKey: lost-job.tell-us-about-the-job-that-ended
+    inputs:
+      - name: companyName
+        type: TEXT
+        promptMessage:
+          promptMessageKey: lost-job.what-is-the-name-of-the-company
+        validators:
+          - validation: NOT_BLANK
+            errorMessageKey: lost-job.please-add-a-name
+      - name: optionalNotice
+        type: CUSTOM
+        customInputFragment: optionalNotice
+      - name: verificationName
+        type: TEXT
+        promptMessage:
+          promptMessageKey: lost-job.what-is-the-name-of-someone-from-the-company
+        helpMessageKey: lost-job.this-might-be-your-manager-or-someone-from-hr
+#        validators:
+#          - validation: NOT_BLANK
+#            errorMessageKey: lost-job.please-add-a-name
 
   - &goToApplyMn
     name: goToApplyMn
@@ -3125,9 +3162,14 @@ workflow:
   clientInfo:
     pageConfiguration: *clientInfo
     nextPages:
-      - pageName: prepareToApply
+      - pageName: tellUsAboutTheLostJob
     datasources:
       - pageName: whoHadChange
+  tellUsAboutTheLostJob:
+    pageConfiguration: *tellUsAboutTheLostJob
+    nextPages:
+      - pageName: prepareToApply
+
   identifyCountyBeforeApplying:
     pageConfiguration: *identifyCounty
     nextPages:
