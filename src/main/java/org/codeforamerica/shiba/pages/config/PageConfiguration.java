@@ -32,6 +32,11 @@ public class PageConfiguration {
   private Value headerKey;
 
   /**
+   * Header custom fragment
+   */
+  private String headerFragment;
+
+  /**
    * Webpage heading subtext.
    */
   private Value headerHelpMessageKey;

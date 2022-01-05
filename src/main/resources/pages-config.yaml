@@ -412,11 +412,7 @@ pageDefinitions:
   - &tellUsAboutTheLostJob
     name: tellUsAboutTheLostJob
     pageTitle: lost-job.tell-us-about-the-job-that-ended
-    headerKey:
-      defaultValue: lost-job.tell-us-about-the-job-that-ended
-      conditionalValues:
-        - value: lost-job.tell-us-about-firstnames-job-that-ended
-          condition: *applyingForSomeoneElse?
+    headerFragment: tellUsAboutTheLostJobHeaderFragment
     inputs:
       - name: companyName
         type: TEXT
@@ -431,7 +427,7 @@ pageDefinitions:
       - name: verificationName
         type: TEXT
         promptMessage:
-          promptMessageKey: lost-job.what-is-the-name-of-someone-from-the-company
+          promptMessageFragmentName: lostJobVerificationFragment
         helpMessageKey: lost-job.this-might-be-your-manager-or-someone-from-hr
       - name: verificationPhoneNumber
         type: PHONE
@@ -452,7 +448,7 @@ pageDefinitions:
       - name: anythingCaseworkerShouldKnow
         type: TEXTAREA
         promptMessage:
-          promptMessageKey: lost-job.is-there-anything-the-caseworker-should-know
+          promptMessageFragmentName: lostJobCaseworkerFragment
   - &goToApplyMn
     name: goToApplyMn
     pageTitle: go-to-apply-mn.title

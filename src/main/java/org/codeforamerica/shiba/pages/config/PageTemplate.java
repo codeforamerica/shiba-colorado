@@ -12,6 +12,7 @@ public class PageTemplate {
   String pageTitle;
   String headerKey;
   String headerHelpMessageKey;
+  String headerFragment;
   String primaryButtonTextKey;
   String subtleLinkTextKey;
   String subtleLinkTargetPage;

@@ -159,6 +159,7 @@ public class PagesData extends HashMap<String, PageData> {
         resolve(featureFlags, pageWorkflowConfiguration, pageConfiguration.getHeaderKey()),
         resolve(featureFlags, pageWorkflowConfiguration,
             pageConfiguration.getHeaderHelpMessageKey()),
+        pageConfiguration.getHeaderFragment(),
         pageConfiguration.getPrimaryButtonTextKey(),
         resolve(featureFlags, pageWorkflowConfiguration, pageConfiguration.getSubtleLinkTextKey()),
         pageWorkflowConfiguration.getSubtleLinkTargetPage(),

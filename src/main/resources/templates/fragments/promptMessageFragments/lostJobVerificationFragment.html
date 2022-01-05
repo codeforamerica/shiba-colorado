@@ -1,0 +1,9 @@
+<div th:fragment="lostJobVerificationFragment"
+     th:with="isApplyingForSomeoneElse=${pagesData.get('whoHadChange').get('whoHadChange').value[0].equals('someoneElse')},
+              name=${pagesData.get('clientInfo').get('firstName').value[0]}">
+  <label class="form-question"
+         th:for="${input.name}"
+         th:id="${input.name + '-label'}"
+         th:utext="#{${isApplyingForSomeoneElse ? 'lost-job.what-is-the-name-of-someone-from-the-company-who-can-verify-firstname': 'lost-job.what-is-the-name-of-someone-from-the-company' }(${name})}">
+  </label>
+</div>

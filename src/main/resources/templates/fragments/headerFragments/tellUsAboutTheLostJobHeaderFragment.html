@@ -1,0 +1,5 @@
+<div th:fragment="tellUsAboutTheLostJobHeaderFragment"
+     th:with="isApplyingForSomeoneElse=${pagesData.get('whoHadChange').get('whoHadChange').value[0].equals('someoneElse')},
+              name=${pagesData.get('clientInfo').get('firstName').value[0]}">
+  <h1 id="page-header" class="h2" th:text="#{${isApplyingForSomeoneElse ? 'lost-job.tell-us-about-firstnames-job-that-ended': 'lost-job.tell-us-about-the-job-that-ended' }(${name})}"></h1>
+</div>
