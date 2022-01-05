@@ -16,6 +16,12 @@
              th:if="${page.hasHeaderHelpMessageKey()}"
              th:text="#{${page.headerHelpMessageKey}}"></p>
         </div>
+        <div th:if="${!page.hasHeader() && page.headerFragment != null}" class="grid__item spacing-above-35 spacing-below-35">
+          <div th:id="${page.headerFragment.headerFragmentName}"
+               th:replace="|fragments/headerFragments/${page.headerFragment.headerFragmentName}| :: ${page.headerFragment.headerFragmentName}"></div>
+        </div>
+
+
         <th:block th:if="${pageNameContext != null}">
           <div th:replace="${pageNameContext} :: ${pageNameContext}"></div>
         </th:block>

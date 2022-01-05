@@ -412,7 +412,11 @@ pageDefinitions:
   - &tellUsAboutTheLostJob
     name: tellUsAboutTheLostJob
     pageTitle: lost-job.tell-us-about-the-job-that-ended
-    headerKey: lost-job.tell-us-about-the-job-that-ended
+    headerKey:
+      defaultValue: lost-job.tell-us-about-the-job-that-ended
+      conditionalValues:
+        - value: lost-job.tell-us-about-firstnames-job-that-ended
+          condition: *applyingForSomeoneElse?
     inputs:
       - name: companyName
         type: TEXT
@@ -429,10 +433,26 @@ pageDefinitions:
         promptMessage:
           promptMessageKey: lost-job.what-is-the-name-of-someone-from-the-company
         helpMessageKey: lost-job.this-might-be-your-manager-or-someone-from-hr
-#        validators:
-#          - validation: NOT_BLANK
-#            errorMessageKey: lost-job.please-add-a-name
-
+      - name: verificationPhoneNumber
+        type: PHONE
+        promptMessage:
+          promptMessageKey: lost-job.what-is-their-phone-number
+        helpMessageKey: lost-job.you-can-provide-a-general-phone-number
+        validators:
+          - validation: PHONE_STARTS_WITH_ONE
+            errorMessageKey: general.validation.area-codes-can-not-begin-with-1
+            condition:
+              input: verificationPhoneNumber
+              matcher: NOT_EMPTY
+          - validation: PHONE
+            errorMessageKey: general.validation.make-sure-to-enter-a-phone-number-with-10-digits
+            condition:
+              input: verificationPhoneNumber
+              matcher: NOT_EMPTY
+      - name: anythingCaseworkerShouldKnow
+        type: TEXTAREA
+        promptMessage:
+          promptMessageKey: lost-job.is-there-anything-the-caseworker-should-know
   - &goToApplyMn
     name: goToApplyMn
     pageTitle: go-to-apply-mn.title
