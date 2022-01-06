@@ -449,6 +449,41 @@ pageDefinitions:
         type: TEXTAREA
         promptMessage:
           promptMessageFragmentName: lostJobCaseworkerFragment
+  - &tellUsMoreAboutTheLostJob
+    name: tellUsMoreAboutTheLostJob
+    pageTitle: tell-us-more-about-the-lost-job.title
+    headerFragment: tellUsMoreAboutTheLostJobHeaderFragment
+    inputs:
+      - name: lastDayOfWorkDate
+        type: DATE
+        promptMessage:
+          promptMessageKey:
+            defaultValue: tell-us-more-about-the-lost-job.what-was-your-last-day-at-work
+            conditionalValues:
+              - value: tell-us-more-about-the-lost-job.what-was-their-last-day-at-work
+                condition: *applyingForSomeoneElse?
+        validators:
+          - validation: DATE
+            errorMessageKey: general.validation.please-enter-the-date-in-this-format
+      - name: lastPayCheckDate
+        type: DATE
+        promptMessage:
+          promptMessageKey:
+            defaultValue: tell-us-more-about-the-lost-job.what-was-the-date-of-your-final-paycheck
+            conditionalValues:
+              - value: tell-us-more-about-the-lost-job.what-was-the-date-of-their-final-paycheck
+                condition: *applyingForSomeoneElse?
+        validators:
+          - validation: DATE
+            errorMessageKey: general.validation.please-enter-the-date-in-this-format
+      - name: finalPaystubAmount
+        type: MONEY
+        promptMessage:
+          promptMessageKey:
+            defaultValue: tell-us-more-about-the-lost-job.what-was-the-amount-of-your-final-paystub
+            conditionalValues:
+              - value: tell-us-more-about-the-lost-job.what-was-the-amount-of-their-final-paystub
+                condition: *applyingForSomeoneElse?
   - &goToApplyMn
     name: goToApplyMn
     pageTitle: go-to-apply-mn.title
@@ -3184,8 +3219,13 @@ workflow:
   tellUsAboutTheLostJob:
     pageConfiguration: *tellUsAboutTheLostJob
     nextPages:
+      - pageName: tellUsMoreAboutTheLostJob
+  tellUsMoreAboutTheLostJob:
+    pageConfiguration: *tellUsMoreAboutTheLostJob
+    nextPages:
       - pageName: prepareToApply
-
+    datasources:
+      - pageName: whoHadChange
   identifyCountyBeforeApplying:
     pageConfiguration: *identifyCounty
     nextPages:
@@ -4473,18 +4513,15 @@ workflow:
   documentsSent:
     pageConfiguration: *documentsSent
 pageGroups:
-  jobs:
+  changes:
     startPages:
-      - householdSelectionForIncome
-      - employersName
+      - changeType
     completePages:
       - hoursAWeek
       - incomePerPayPeriod
       - lastThirtyDaysJobIncome
-    reviewPage: jobBuilder
-    redirectPage: jobRedirectPage
-    deleteWarningPage: jobDeleteWarningPage
-    restartPage: incomeByJob
+    reviewPage: anyOtherChanges
+    restartPage: changeType
   household:
     startPages:
       - householdMemberInfo
