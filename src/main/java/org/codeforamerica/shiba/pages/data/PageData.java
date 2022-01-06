@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -43,7 +44,7 @@ public class PageData extends HashMap<String, InputData> {
           // Remove unicode null character if present
           List<String> sanitizedValue = value.stream()
               .map(v -> v.replace("\u0000", ""))
-              .toList();
+              .collect(Collectors.toCollection(ArrayList::new));
           InputData inputData = new InputData(sanitizedValue, formInput.getValidators());
           return Map.entry(formInput.getName(), inputData);
         })

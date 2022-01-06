@@ -1,0 +1,9 @@
+<div th:fragment="addDocuments">
+  <h1 class="grid__item spacing-above-35 h2 spacing-below-25 spacing-above-0"
+      th:text="#{add-documents.add-the-letter-or-paystubs}"></h1>
+  <div class="grid__item text--centered spacing-below-25">
+    <div th:replace="fragments/icons/icon-take-picture :: icon-take-picture"></div>
+  </div>
+  <button class="grid__item button text--centered">Pick a file from this computer</button>
+<!--  <div th:replace="milestoneTemplate :: milestoneTemplate('milestone-income', ${step}, 'intro-income.income-and-employment', ${contentHeaders}, ${contentItems})"></div>-->
+</div>

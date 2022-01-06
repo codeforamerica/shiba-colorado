@@ -494,18 +494,33 @@ pageDefinitions:
     name: doYouHaveDocuments
     pageTitle: do-you-have-documents.title
     headerKey: do-you-have-documents.title
-#      defaultValue: do-you-have-documents.title
-#      conditionalValues:
-#        - value: self-employment.is-your-work-here
-#          condition: *livesAloneOrIsApplicantsJob?
     hasPrimaryButton: false
     inputs:
       - name: doYouHaveALetterOrPaystubs
         promptMessage:
-          promptMessageFragmentName: selfEmploymentPrompt
+          promptMessageFragmentName: doYouHaveDocumentsPrompt
         type: YES_NO
-    contextFragment: jobContextFragment
+  - &addDocuments
+    name: addDocuments
+    pageTitle: add-documents.add-the-letter-or-paystubs
 
+  #    hasPrimaryButton: false
+  - &anyOtherChanges
+    name: anyOtherChanges
+    pageTitle: any-other-changes.do-you-have-any-other-changes
+    headerKey: any-other-changes.do-you-have-any-other-changes
+    inputs:
+      - name: anyOtherChanges
+        type: RADIO
+        options:
+          selectableOptions:
+            - value: "true"
+              messageKey: general.inputs.yes
+            - value: "false"
+              messageKey: general.inputs.no
+      - name: changesList
+        type: CUSTOM
+        customInputFragment: changesList
   - &goToApplyMn
     name: goToApplyMn
     pageTitle: go-to-apply-mn.title
@@ -3209,7 +3224,7 @@ workflow:
     pageConfiguration: *landing
     nextPages:
       - pageName: howItWorks
-#      - pageName: identifyCountyBeforeApplying
+  #      - pageName: identifyCountyBeforeApplying
   howItWorks:
     pageConfiguration: *howItWorks
     nextPages:
@@ -3228,26 +3243,63 @@ workflow:
     pageConfiguration: *changeType
     nextPages:
       - pageName: whoHadChange
+    groupName: changes
   whoHadChange:
     pageConfiguration: *whoHadChange
     nextPages:
       - pageName: clientInfo
+    groupName: changes
+    datasources:
+      - groupName: changes
   clientInfo:
     pageConfiguration: *clientInfo
     nextPages:
       - pageName: tellUsAboutTheLostJob
+    groupName: changes
     datasources:
-      - pageName: whoHadChange
+      - groupName: changes
+        pageName: whoHadChange
   tellUsAboutTheLostJob:
     pageConfiguration: *tellUsAboutTheLostJob
     nextPages:
       - pageName: tellUsMoreAboutTheLostJob
+    groupName: changes
   tellUsMoreAboutTheLostJob:
     pageConfiguration: *tellUsMoreAboutTheLostJob
     nextPages:
-      - pageName: prepareToApply
+      - pageName: doYouHaveDocuments
+    groupName: changes
     datasources:
-      - pageName: whoHadChange
+      - groupName: changes
+        pageName: whoHadChange
+  doYouHaveDocuments:
+    pageConfiguration: *doYouHaveDocuments
+    nextPages:
+      - pageName: addDocuments
+    groupName: changes
+    datasources:
+      - groupName: changes
+        pageName: whoHadChange
+  addDocuments:
+    pageConfiguration: *addDocuments
+    nextPages:
+      - pageName: anyOtherChanges
+#    groupName: changes
+#    datasources:
+#      - groupName: changes
+  anyOtherChanges:
+    pageConfiguration: *anyOtherChanges
+    nextPages:
+      - pageName: changeType
+        condition:
+          pageName: anyOtherChanges
+          input: anyOtherChanges
+          value: "true"
+      - pageName: textMessageConsent
+#    groupName: changes
+    datasources:
+      - groupName: changes
+        pageName: changeType
   identifyCountyBeforeApplying:
     pageConfiguration: *identifyCounty
     nextPages:
@@ -4539,11 +4591,21 @@ pageGroups:
     startPages:
       - changeType
     completePages:
+      - doYouHaveDocuments
+    reviewPage: anyOtherChanges
+    restartPage: changeType
+  jobs:
+    startPages:
+      - householdSelectionForIncome
+      - employersName
+    completePages:
       - hoursAWeek
       - incomePerPayPeriod
       - lastThirtyDaysJobIncome
-    reviewPage: anyOtherChanges
-    restartPage: changeType
+    reviewPage: jobBuilder
+    redirectPage: jobRedirectPage
+    deleteWarningPage: jobDeleteWarningPage
+    restartPage: incomeByJob
   household:
     startPages:
       - householdMemberInfo

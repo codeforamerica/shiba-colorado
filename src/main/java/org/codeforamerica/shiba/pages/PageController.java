@@ -387,11 +387,12 @@ public class PageController {
         }
       }
     } else {
+      DatasourcePages regularPageDataSources /* and incomplete iterations */ = pagesData.getDatasourcePagesBy(pageWorkflow.getDatasources());
+      DatasourcePages subworkflowPageDatasources = pagesData.getSubworkflowDatasources(pageWorkflow.getDatasources(), applicationData.getSubworkflows());
+      DatasourcePages mergeDatasourcePages = regularPageDataSources.mergeDatasourcePages(subworkflowPageDatasources);
       model.put("pageDatasources",
-          pagesData.getDatasourcePagesBy(pageWorkflow.getDatasources())
-              .mergeDatasourcePages(
-                  pagesData.getDatasourceGroupBy(pageWorkflow.getDatasources(),
-                      applicationData.getSubworkflows())));
+          // pagesData + the pagesData for pages in subworkflows
+          mergeDatasourcePages);
       model.put("data", pagesData
           .getPageDataOrDefault(pageTemplate.getName(), pageWorkflow.getPageConfiguration()));
       model.put("pagesData", pagesData);
@@ -502,8 +503,7 @@ public class PageController {
     pagesData.putPage(page.getName(), pageData);
 
     Boolean pageDataIsValid = pageData.isValid();
-    if (pageDataIsValid &&
-        pageWorkflow.getGroupName() != null &&
+    if (pageDataIsValid && pageWorkflow.getGroupName() != null &&
         applicationConfiguration.getPageGroups().get(pageWorkflow.getGroupName())
             .getCompletePages()
             .contains(page.getName())

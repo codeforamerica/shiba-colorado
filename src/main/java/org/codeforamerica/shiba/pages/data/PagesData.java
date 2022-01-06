@@ -63,12 +63,12 @@ public class PagesData extends HashMap<String, PageData> {
         .collect(toMap(Entry::getKey, Entry::getValue))));
   }
 
-  public DatasourcePages getDatasourceGroupBy(List<PageDatasource> datasources,
+  public DatasourcePages getSubworkflowDatasources(List<PageDatasource> datasources,
       Subworkflows subworkflows) {
     Map<String, PageData> pages = new HashMap<>();
     datasources.stream()
-        .filter(datasource -> datasource.getGroupName() != null && subworkflows
-            .containsKey(datasource.getGroupName()))
+        // only keep datasources that have a group that has a complete iteration
+        .filter(datasource -> datasource.getGroupName() != null && subworkflows.containsKey(datasource.getGroupName()))
         .forEach(datasource -> {
           PageData value = new PageData();
           subworkflows.get(datasource.getGroupName()).stream()

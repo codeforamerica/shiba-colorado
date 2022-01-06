@@ -1,21 +1,25 @@
 <!DOCTYPE html>
 <html th:lang="${#locale.language}" xmlns:th="http://www.thymeleaf.org">
 <body>
-<div th:fragment="doYouHaveDocumentsPrompt" class="reveal reveal-adjacent spacing-below-60">
+<div th:fragment="doYouHaveDocumentsPrompt" class="reveal reveal-adjacent spacing-below-60"
+     th:with="isApplyingForSomeoneElse=${pagesData.get('whoHadChange').get('whoHadChange').value[0].equals('someoneElse')},
+              name=${pagesData.get('clientInfo').get('firstName').value[0]}">
     <a href="#" class="reveal__link reveal__link-adjacent">
         <div class="reveal__link__header-adjacent" th:text="#{do-you-have-documents.reveal-header}"></div>
         <div class="reveal__content reveal__content-adjacent">
+            <p th:text="#{${isApplyingForSomeoneElse ? 'do-you-have-documents.the-county-needs-to-verify-firstname-income' : 'do-you-have-documents.the-county-needs-to-verify-your-income'}(${name})}"></p>
             <ul class="left-justified-list">
-                <li th:text="#{self-employment.you-do-gig-work-independent-contracting-or-run-your-own-business}"></li>
-                <li class="spacing-above-15"
-                     th:text="#{self-employment.you-receive-a-1099-misc-tax-form-from-a-company-or-individual-at-the-end-of-the-year}"></li>
-                <li class="spacing-above-15"
-                     th:text="#{self-employment.you-do-not-get-employment-benefits-or-tax-contributions-from-the-company-or-individual-you-work-for}"></li>
-                <li class="spacing-above-15">
-                    <strong th:text="#{self-employment.job-examples}"></strong>
-                    <span th:text="#{self-employment.rideshare-or-food-delivery-driver-hair-dresser-dog-walker-newspaper-delivery-artist}"></span>
-                </li>
+                <li th:text="#{do-you-have-documents.a-paycheck-labeled-final}"></li>
+                <li th:text="#{${isApplyingForSomeoneElse ? 'do-you-have-documents.a-letter-from-their-old-employer' : 'do-you-have-documents.a-letter-from-your-old-employer'}(${name})}"></li>
             </ul>
+            <p th:text="#{do-you-have-documents.it-would-be-helpful}"></p>
+            <ul class="left-justified-list">
+                <li th:text="#{${isApplyingForSomeoneElse ? 'do-you-have-documents.say-firstname-doesnt-work-there' : 'do-you-have-documents.say-you-dont-work-there'}(${name})}"></li>
+                <li th:text="#{${isApplyingForSomeoneElse ? 'do-you-have-documents.say-what-their-last-day-of-work-was' : 'do-you-have-documents.say-what-your-last-day-of-work-was'}}"></li>
+                <li th:text="#{${isApplyingForSomeoneElse ? 'do-you-have-documents.say-the-day-and-amount-of-their' : 'do-you-have-documents.say-the-day-and-amount-of-your'}}"></li>
+                <li th:text="#{do-you-have-documents.be-on-letterhead}"></li>
+            </ul>
+            <p th:text="#{do-you-have-documents.if-you-dont-have-this}"></p>
         </div>
     </a>
 </div>
