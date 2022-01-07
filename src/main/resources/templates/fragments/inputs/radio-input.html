@@ -23,7 +23,7 @@
                                         aria-invalid=${hasError},
                                         aria-label=${needsAriaLabel ? input.name : ''}"
                                th:attrappend="data-follow-up=${input.followUpValues.contains(option.value)} ? |#${input.name}-follow-up| : ''">
-                        <span th:text="#{${option.messageKey}}"></span>
+                        <span th:text="#{${pagesData.resolve(featureFlags, workflow, option.messageKey)}}"></span>
                     </label>
                 </th:block>
             </fieldset>

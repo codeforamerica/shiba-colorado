@@ -492,12 +492,31 @@ pageDefinitions:
               matcher: NOT_EMPTY
   - &selfEmployed
     name: selfEmployed
-    pageTitle: self-employed.title
+    pageTitle: self-employed.title-you
     headerFragment: selfEmployedHeaderFragment
     inputs:
       - type: CUSTOM
         name: selfEmploymentExamples
         customInputFragment: selfEmploymentExamplesPrompt
+      - type: RADIO
+        name: isSelfEmployed
+        options:
+          selectableOptions:
+            - value: "true"
+              messageKey:
+                defaultValue: self-employed.i-am-self-employed
+                conditionalValues:
+                  - value: self-employed.they-are-self-employed
+                    condition: *applyingForSomeoneElse?
+            - value: "false"
+              messageKey:
+                defaultValue: self-employed.i-am-not-self-employed
+                conditionalValues:
+                  - value: self-employed.they-are-not-self-employed
+                    condition: *applyingForSomeoneElse?
+  - &notYetSupported
+    name: notYetSupported
+    pageTitle: not-yet-supported.title
   - &doYouHaveDocuments
     name: doYouHaveDocuments
     pageTitle: do-you-have-documents.title
@@ -3293,9 +3312,17 @@ workflow:
     pageConfiguration: *selfEmployed
     groupName: changes
     nextPages:
-      - pageName: prepareToApply
+      - pageName: notYetSupported
+        condition:
+          input: isSelfEmployed
+          value: "true"
+      - pageName: tellUsAboutTheNewJob
+        condition:
+          input: isSelfEmployed
+          value: "false"
     datasources:
       - groupName: changes
+      - pageName: whoHadChange
   doYouHaveDocuments:
     pageConfiguration: *doYouHaveDocuments
     nextPages:
@@ -3308,9 +3335,6 @@ workflow:
     pageConfiguration: *addDocuments
     nextPages:
       - pageName: anyOtherChanges
-#    groupName: changes
-#    datasources:
-#      - groupName: changes
   anyOtherChanges:
     pageConfiguration: *anyOtherChanges
     nextPages:
@@ -3320,12 +3344,8 @@ workflow:
           input: anyOtherChanges
           value: "true"
       - pageName: textMessageConsent
-#    groupName: changes
     datasources:
       - groupName: changes
-#        pageName: changeType
-#      - groupName: changes
-#        pageName: whoHadChange
   identifyCountyBeforeApplying:
     pageConfiguration: *identifyCounty
     nextPages:

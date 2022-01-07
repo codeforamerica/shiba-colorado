@@ -367,6 +367,11 @@ form .drag-and-drop-box-compact {
   margin-right: auto;
 }
 
+.center-text {
+  margin-left: auto;
+  margin-right: auto;
+}
+
 .dz-button {
   border: none;
   border-radius: 50%;
@@ -1550,4 +1555,8 @@ legend.form-question {
 
 .dash-outline {
   border: dashed 1px gray;
+  padding: 5px;
+  border-radius: 5px;
+  display: inline-block;
+  margin-bottom: 5px;
 }
