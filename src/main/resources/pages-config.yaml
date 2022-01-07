@@ -514,9 +514,51 @@ pageDefinitions:
                 conditionalValues:
                   - value: self-employed.they-are-not-self-employed
                     condition: *applyingForSomeoneElse?
+  - &tellUsAboutTheNewJob
+    name: tellUsAboutTheNewJob
+    pageTitle: lost-job.tell-us-about-the-job-that-ended
+    headerFragment: tellUsAboutTheNewJobHeaderFragment
+    inputs:
+      - name: companyName
+        type: TEXT
+        promptMessage:
+          promptMessageKey: lost-job.what-is-the-name-of-the-company
+        validators:
+          - validation: NOT_BLANK
+            errorMessageKey: lost-job.please-add-a-name
+      - name: optionalNotice
+        type: CUSTOM
+        customInputFragment: optionalNotice
+      - name: superVisorOrManagerName
+        type: TEXT
+        promptMessage:
+          promptMessageFragmentName: tellUsAboutTheNewJobPromptFragment
+        helpMessageKey:
+          defaultValue: tell-us-about-the-new-job.this-might-be-your-manager
+          conditionalValues:
+            - value: tell-us-about-the-new-job.this-might-be-their-manager
+              condition: *applyingForSomeoneElse?
+      - name: verificationPhoneNumber
+        type: PHONE
+        promptMessage:
+          promptMessageKey: tell-us-about-the-new-job.what-is-their-phone-number
+        helpMessageKey: tell-us-about-the-new-job.you-can-provide-a-general-phone-number
+        validators:
+          - validation: PHONE_STARTS_WITH_ONE
+            errorMessageKey: general.validation.area-codes-can-not-begin-with-1
+            condition:
+              input: verificationPhoneNumber
+              matcher: NOT_EMPTY
+          - validation: PHONE
+            errorMessageKey: general.validation.make-sure-to-enter-a-phone-number-with-10-digits
+            condition:
+              input: verificationPhoneNumber
+              matcher: NOT_EMPTY
   - &notYetSupported
     name: notYetSupported
-    pageTitle: not-yet-supported.title
+    pageTitle: not-yet-supported.header
+    headerKey: not-yet-supported.header
+    hasPrimaryButton: false
   - &doYouHaveDocuments
     name: doYouHaveDocuments
     pageTitle: do-you-have-documents.title
@@ -3323,6 +3365,16 @@ workflow:
     datasources:
       - groupName: changes
       - pageName: whoHadChange
+  tellUsAboutTheNewJob:
+    pageConfiguration: *tellUsAboutTheNewJob
+    nextPages:
+      - pageName: prepareToApply
+    groupName: changes
+    datasources:
+      - groupName: changes
+        pageName: whoHadChange
+  notYetSupported:
+    pageConfiguration: *notYetSupported
   doYouHaveDocuments:
     pageConfiguration: *doYouHaveDocuments
     nextPages:

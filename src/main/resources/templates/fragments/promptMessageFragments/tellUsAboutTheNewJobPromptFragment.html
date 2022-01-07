@@ -1,0 +1,9 @@
+<div th:fragment="tellUsAboutTheNewJobPromptFragment"
+     th:with="isApplyingForSomeoneElse=${pagesData.get('whoHadChange').get('whoHadChange').value[0].equals('someoneElse')},
+              name=${pagesData.get('clientInfo').get('firstName').value[0]}">
+  <label class="form-question"
+         th:for="${input.name}"
+         th:id="${input.name + '-label'}"
+         th:utext="#{${isApplyingForSomeoneElse ? 'tell-us-about-the-new-job.what-is-the-name-of-your-supervisor-or-manager-firstname': 'tell-us-about-the-new-job.what-is-the-name-of-your-supervisor-or-manager' }(${name})}">
+  </label>
+</div>
