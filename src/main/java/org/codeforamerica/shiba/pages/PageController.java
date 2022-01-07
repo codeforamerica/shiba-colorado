@@ -376,16 +376,6 @@ public class PageController {
         .isUsingPageTemplateFragment()) {
       model.put("data", pagesData.getDatasourcePagesBy(pageWorkflow.getDatasources()));
       model.put("applicationData", applicationData);
-
-      if (applicationData.hasRequiredSubworkflows(pageWorkflow.getDatasources())) {
-        model.put("subworkflows", pageWorkflow.getSubworkflows(applicationData));
-        if (isNotBlank(iterationIndex)) {
-          var iterationData = pageWorkflow.getSubworkflows(applicationData)
-              .get(pageWorkflow.getAppliesToGroup())
-              .get(Integer.parseInt(iterationIndex));
-          model.put("iterationData", iterationData);
-        }
-      }
     } else {
       DatasourcePages regularPageDataSources /* and incomplete iterations */ = pagesData.getDatasourcePagesBy(pageWorkflow.getDatasources());
       DatasourcePages subworkflowPageDatasources = pagesData.getSubworkflowDatasources(pageWorkflow.getDatasources(), applicationData.getSubworkflows());
@@ -398,7 +388,15 @@ public class PageController {
       model.put("pagesData", pagesData);
       model.put("workflow", pageWorkflow);
     }
-
+    if (applicationData.hasRequiredSubworkflows(pageWorkflow.getDatasources())) {
+      model.put("subworkflows", pageWorkflow.getSubworkflows(applicationData));
+      if (isNotBlank(iterationIndex)) {
+        var iterationData = pageWorkflow.getSubworkflows(applicationData)
+            .get(pageWorkflow.getAppliesToGroup())
+            .get(Integer.parseInt(iterationIndex));
+        model.put("iterationData", iterationData);
+      }
+    }
     return model;
   }
 

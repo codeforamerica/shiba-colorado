@@ -1,13 +1,12 @@
 <!-- This is not an actual input, it's a list of job changes that we want to display at the bottom of the screen so we're utilizing "inputs" to display it in the desired position -->
 <div th:fragment="changesList (input, data)">
-
-  <th:block th:each="changeType: ${pageDatasources.get('changeType').get('changeType').value}">
-    <div class="grid__item spacing-below-5">
-
-      <p th:id="|iteration${changeType}|" th:if="${changeType == 'jobEnded'}">
-        <span
-              th:text="#{any-other-changes.reported-your-job-termination}"></span>
-      </p>
+  <th:block th:each="change, iterator: ${subworkflows.get('changes')}">
+    <div class="grid__item spacing-below-5" th:with="changeType=${change.getPagesData().get('changeType').get('changeType').getValue()[0]},
+                                                     isSelf=${change.getPagesData().get('whoHadChange').get('whoHadChange').getValue()[0].equals('me')},
+                                                     firstName=${change.getPagesData().get('clientInfo').get('firstName').getValue()[0]},
+                                                     lastName=${change.getPagesData().get('clientInfo').get('lastName').getValue()[0]},
+                                                     person=${isSelf ? 'you' : firstName + ' ' + lastName}">
+      <p th:if="${changeType.equals('jobEnded')}" th:text="#{any-other-changes.reported-job-termination(${person})}"></p>
     </div>
   </th:block>
 </div>
