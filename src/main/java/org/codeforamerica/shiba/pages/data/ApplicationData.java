@@ -86,7 +86,7 @@ public class ApplicationData implements Serializable {
   public NextPage getNextPageName(
       FeatureFlagConfiguration featureFlags,
       @NotNull PageWorkflowConfiguration currentPage,
-      Integer option) {
+      Integer option, PagesData pagesDataWithIncompleteIterations) {
     if (currentPage.isDirectNavigation()) {
       return currentPage.getNextPages().get(option);
     }
@@ -94,14 +94,15 @@ public class ApplicationData implements Serializable {
     return currentPage.getNextPages().stream()
         .filter(
             potentialNextPage ->
-                nextPageConditionsAreSatisfied(featureFlags, currentPage, potentialNextPage)
+                nextPageConditionsAreSatisfied(featureFlags, currentPage, potentialNextPage, pagesDataWithIncompleteIterations)
         )
         .findFirst()
         .orElseThrow(() -> new RuntimeException("Cannot find suitable next page."));
   }
 
   private boolean nextPageConditionsAreSatisfied(FeatureFlagConfiguration featureFlags,
-      @NotNull PageWorkflowConfiguration currentPage, NextPage nextPage) {
+      @NotNull PageWorkflowConfiguration currentPage, NextPage nextPage,
+      PagesData pagesDataWithIncompleteIterations) {
     boolean satisfied = true;
     Condition condition = nextPage.getCondition();
     if (condition != null) {
@@ -109,7 +110,7 @@ public class ApplicationData implements Serializable {
         satisfied = condition.matches(
             incompleteIterations.get(currentPage.getGroupName())
                 .get(currentPage.getPageConfiguration().getName()),
-            pagesData);
+            pagesDataWithIncompleteIterations);// is only just the pages data without incomplete iterations or subworkflows
       } else {
         var datasourcePages = getDatasourceDataForPageIncludingSubworkflows(currentPage);
         satisfied = datasourcePages.satisfies(condition);

@@ -1547,3 +1547,7 @@ legend.form-question {
 #skip-to-content:focus {
   left: 8px;
 }
+
+.dash-outline {
+  border: dashed 1px gray;
+}
