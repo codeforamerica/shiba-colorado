@@ -554,6 +554,123 @@ pageDefinitions:
             condition:
               input: verificationPhoneNumber
               matcher: NOT_EMPTY
+  - &tellUsMoreAboutTheNewJob
+    name: tellUsMoreAboutTheNewJob
+    pageTitle: tell-us-more-about-the-new-job.title
+    headerKey: tell-us-more-about-the-new-job.title
+    inputs:
+      - name: firstDay
+        type: DATE
+        promptMessage:
+          promptMessageKey:
+            defaultValue: tell-us-more-about-the-new-job.your-first-day
+            conditionalValues:
+              - value: tell-us-more-about-the-new-job.their-first-day
+                condition: *applyingForSomeoneElse?
+        validators:
+          - validation: DATE
+            errorMessageKey: general.validation.please-enter-the-date-in-this-format
+      - name: haveTheyBeenPaidYet
+        type: RADIO
+        promptMessage:
+          promptMessageKey:
+            defaultValue: tell-us-more-about-the-new-job.have-you-been-paid
+            conditionalValues:
+              - value: tell-us-more-about-the-new-job.have-they-been-paid
+                condition: *applyingForSomeoneElse?
+        options:
+          selectableOptions:
+            - value: "true"
+              messageKey: general.inputs.yes
+            - value: "false"
+              messageKey: general.inputs.no
+        validators:
+          - validation: NOT_BLANK
+            errorMessageKey: general.validation.make-sure-you-answer-this-question
+  - &howMuchWillYouMake
+    name: howMuchWillYouMake
+    pageTitle: how-much-will-you-make.title
+    headerFragment: howMuchWillYouMakeHeaderFragment
+    inputs:
+      - name: hourlyWage
+        type: HOURLY_WAGE
+        promptMessage:
+          promptMessageKey:
+            defaultValue: how-much-will-you-make.your-wage
+            conditionalValues:
+              - value: how-much-will-you-make.their-wage
+                condition: *applyingForSomeoneElse?
+        validators:
+          - validation: NOT_BLANK
+            errorMessageKey: general.validation.make-sure-you-answer-this-question
+          - validation: MONEY
+            errorMessageKey: general.validation.make-sure-you-enter-a-dollar-amount
+            condition:
+              input: hourlyWage
+              matcher: NOT_EMPTY
+      - name: sameNumberOfHours
+        type: RADIO
+        promptMessage:
+          promptMessageKey:
+            defaultValue: how-much-will-you-make.same-hours-you
+            conditionalValues:
+              - value: how-much-will-you-make.same-hours-them
+                condition: *applyingForSomeoneElse?
+        options:
+          selectableOptions:
+            - value: "true"
+              messageKey: general.inputs.yes
+            - value: "false"
+              messageKey: general.inputs.no
+        validators:
+          - validation: NOT_BLANK
+            errorMessageKey: general.validation.make-sure-you-answer-this-question
+        followUpValues:
+          - "true"
+        followUps:
+          - name: howManyHours
+            type: TEXT
+            validators:
+              - validation: NOT_BLANK
+                errorMessageKey: general.validation.make-sure-you-answer-this-question
+                condition:
+                  input: sameNumberOfHours
+                  value: "true"
+            promptMessage:
+              promptMessageKey:
+                defaultValue: how-much-will-you-make.how-many-you
+                conditionalValues:
+                  - value: how-much-will-you-make.how-many-them
+                    condition: *applyingForSomeoneElse?
+      - name: payFrequency
+        type: TEXT
+        promptMessage:
+          promptMessageKey:
+            defaultValue: how-much-will-you-make.how-often-you
+            conditionalValues:
+              - value: how-much-will-you-make.how-often-them
+                condition: *applyingForSomeoneElse?
+        helpMessageKey: how-much-will-you-make.how-often-example
+        validators:
+          - validation: NOT_BLANK
+            errorMessageKey: general.validation.make-sure-you-answer-this-question
+      - name: firstPaycheck
+        type: DATE
+        promptMessage:
+          promptMessageKey:
+            defaultValue: how-much-will-you-make.first-paycheck-you
+            conditionalValues:
+              - value: how-much-will-you-make.first-paycheck-them
+                condition: *applyingForSomeoneElse?
+        helpMessageKey: how-much-will-you-make.estimate-if-not-sure
+        validators:
+          - validation: DATE
+            errorMessageKey: general.validation.please-enter-the-date-in-this-format
+      - name: anythingElse
+        type: TEXT
+        promptMessage:
+          promptMessageFragmentName: howMuchWillYouMakePromptFragment
+        helpMessageKey: how-much-will-you-make.if-paystubs
   - &notYetSupported
     name: notYetSupported
     pageTitle: not-yet-supported.header
@@ -861,10 +978,6 @@ pageDefinitions:
                   matcher: NOT_EMPTY
             promptMessage:
               promptMessageKey: personal-info.when-did-you-move-to-minnesota
-          - name: moveToMnPreviousCity
-            type: TEXT
-            promptMessage:
-              promptMessageKey: personal-info.what-state-did-you-move-from
   - &contactInfo
     name: contactInfo
     pageTitle: contact-info.title
@@ -3335,8 +3448,7 @@ workflow:
           value: newJob
     groupName: changes
     datasources:
-      - groupName: changes
-#        pageName: whoHadChange
+      - pageName: whoHadChange
   tellUsAboutTheLostJob:
     pageConfiguration: *tellUsAboutTheLostJob
     nextPages:
@@ -3368,11 +3480,26 @@ workflow:
   tellUsAboutTheNewJob:
     pageConfiguration: *tellUsAboutTheNewJob
     nextPages:
-      - pageName: prepareToApply
+      - pageName: tellUsMoreAboutTheNewJob
     groupName: changes
     datasources:
       - groupName: changes
         pageName: whoHadChange
+  tellUsMoreAboutTheNewJob:
+    pageConfiguration: *tellUsMoreAboutTheNewJob
+    nextPages:
+      - pageName: howMuchWillYouMake
+    groupName: changes
+    datasources:
+      - groupName: changes
+        pageName: whoHadChange
+  howMuchWillYouMake:
+    pageConfiguration: *howMuchWillYouMake
+    nextPages:
+      - pageName: doYouHaveDocuments
+    groupName: changes
+    datasources:
+      - pageName: whoHadChange
   notYetSupported:
     pageConfiguration: *notYetSupported
   doYouHaveDocuments:
@@ -4690,6 +4817,7 @@ pageGroups:
       - changeType
     completePages:
       - doYouHaveDocuments
+      - howMuchWillYouMake
     reviewPage: anyOtherChanges
     restartPage: changeType
   jobs:

@@ -7,6 +7,7 @@
                                                      lastName=${change.getPagesData().get('clientInfo').get('lastName').getValue()[0]},
                                                      person=${isSelf ? 'you' : firstName + ' ' + lastName}">
       <p th:if="${changeType.equals('jobEnded')}" th:text="#{any-other-changes.reported-job-termination(${person})}"></p>
+      <p th:if="${changeType.equals('newJob')}" th:text="#{any-other-changes.reported-new-job(${person})}"></p>
     </div>
   </th:block>
 </div>
