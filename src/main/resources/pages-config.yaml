@@ -4817,7 +4817,7 @@ pageGroups:
       - changeType
     completePages:
       - doYouHaveDocuments
-      - howMuchWillYouMake
+#      - howMuchWillYouMake
     reviewPage: anyOtherChanges
     restartPage: changeType
   jobs:

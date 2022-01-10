@@ -155,15 +155,13 @@ public class PageController {
       var dataForIncompleteIteration = getIncompleteIterationPagesData(pageName,
           pageWorkflowConfig);
 
-      if (dataForIncompleteIteration == null) {
-        String redirectPageForGroup = applicationConfiguration.getPageGroups()
-            .get(pageWorkflowConfig.getGroupName()).getRedirectPage();
-        throw new RuntimeException();
+      if (dataForIncompleteIteration != null) {
+        pagesData = (PagesData) pagesData
+            .clone(); // Avoid changing the original applicationData PagesData by cloning the object
+        pagesData.putAll(dataForIncompleteIteration);
       }
-      pagesData = (PagesData) pagesData
-          .clone(); // Avoid changing the original applicationData PagesData by cloning the object
-      pagesData.putAll(dataForIncompleteIteration);
     }
+
     NextPage nextPage = applicationData.getNextPageName(featureFlags, currentPage, option, pagesData);
     ofNullable(nextPage.getFlow()).ifPresent(applicationData::setFlow);
     PageWorkflowConfiguration nextPageWorkflow = applicationConfiguration
