@@ -3570,7 +3570,7 @@ workflow:
     pageConfiguration: *tellUsAboutChangeInHours
     groupName: changes
     nextPages:
-      - pageName: prepareToApply
+      - pageName: doYouHaveDocuments
     datasources:
       - groupName: changes
       - pageName: whoHadChange
