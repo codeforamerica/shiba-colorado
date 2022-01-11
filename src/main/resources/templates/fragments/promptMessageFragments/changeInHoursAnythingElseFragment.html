@@ -1,0 +1,9 @@
+<div th:fragment="changeInHoursAnythingElseFragment"
+     th:with="isApplyingForSomeoneElse=${pagesData.get('whoHadChange').get('whoHadChange').value[0].equals('someoneElse')},
+              name=${pagesData.get('clientInfo').get('firstName').value[0]}">
+  <label class="form-question"
+         th:for="${input.name}"
+         th:id="${input.name + '-label'}"
+         th:utext="#{${isApplyingForSomeoneElse ? 'tell-us-about-change-in-hours.is-there-anything-else-firstname': 'tell-us-about-change-in-hours.is-there-anything-else-you' }(${name})}">
+  </label>
+</div>

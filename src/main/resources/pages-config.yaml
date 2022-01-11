@@ -490,6 +490,97 @@ pageDefinitions:
             condition:
               input: finalPaystubAmount
               matcher: NOT_EMPTY
+  - &tellUsAboutChangeInHoursJob
+    name: tellUsAboutChangeInHoursJob
+    pageTitle: tell-us-about-change-in-hours-job.title
+    headerKey: tell-us-about-change-in-hours-job.title
+    inputs:
+      - name: companyName
+        type: TEXT
+        promptMessage:
+          promptMessageKey: lost-job.what-is-the-name-of-the-company
+        validators:
+          - validation: NOT_BLANK
+            errorMessageKey: lost-job.please-add-a-name
+      - name: optionalNotice
+        type: CUSTOM
+        customInputFragment: optionalNotice
+      - name: verificationName
+        type: TEXT
+        promptMessage:
+          promptMessageFragmentName: changeInHoursVerificationFragment
+        helpMessageKey:
+          defaultValue: tell-us-about-change-in-hours-job.verification-help-you
+          conditionalValues:
+            - value: tell-us-about-change-in-hours-job.verification-help-they
+              condition: *applyingForSomeoneElse?
+      - name: verificationPhoneNumber
+        type: PHONE
+        promptMessage:
+          promptMessageKey: lost-job.what-is-their-phone-number
+        helpMessageKey: lost-job.you-can-provide-a-general-phone-number
+        validators:
+          - validation: PHONE_STARTS_WITH_ONE
+            errorMessageKey: general.validation.area-codes-can-not-begin-with-1
+            condition:
+              input: verificationPhoneNumber
+              matcher: NOT_EMPTY
+          - validation: PHONE
+            errorMessageKey: general.validation.make-sure-to-enter-a-phone-number-with-10-digits
+            condition:
+              input: verificationPhoneNumber
+              matcher: NOT_EMPTY
+  - &tellUsAboutChangeInHours
+    name: tellUsAboutChangeInHours
+    pageTitle: tell-us-about-change-in-hours.title
+    headerFragment: tellUsAboutChangeInHoursHeaderFragment
+    inputs:
+      - type: TEXT
+        name: hoursAWeek
+        promptMessage:
+          promptMessageKey:
+            defaultValue: tell-us-about-change-in-hours.how-many-hours-a-week-you
+            conditionalValues:
+              - value: tell-us-about-change-in-hours.how-many-hours-a-week-they
+                condition: *applyingForSomeoneElse?
+        validators:
+          - validation: NOT_BLANK
+            errorMessageKey: tell-us-about-change-in-hours.please-add-an-amount
+        helpMessageKey: tell-us-about-change-in-hours.if-it-varies
+      - type: MONEY
+        name: hourlyWageChange
+        promptMessage:
+          promptMessageKey:
+            defaultValue: tell-us-about-change-in-hours.hourly-wage-you
+            conditionalValues:
+              - value: tell-us-about-change-in-hours.hourly-wage-they
+                condition: *applyingForSomeoneElse?
+        validators:
+          - validation: MONEY
+            errorMessageKey: general.validation.make-sure-you-enter-a-dollar-amount
+      - name: whenDidThisChangeHappen
+        type: DATE
+        promptMessage:
+          promptMessageKey: tell-us-about-change-in-hours.when-did-this-change-happen
+        helpMessageKey: tell-us-about-change-in-hours.estimate-if-youre-not-sure
+        validators:
+          - validation: DATE
+            errorMessageKey: general.validation.please-enter-the-date-in-this-format
+      - name: payFrequency
+        type: TEXT
+        promptMessage:
+          promptMessageKey:
+            defaultValue: how-much-will-you-make.how-often-you
+            conditionalValues:
+              - value: how-much-will-you-make.how-often-them
+                condition: *applyingForSomeoneElse?
+        validators:
+          - validation: NOT_BLANK
+            errorMessageKey: general.validation.make-sure-you-answer-this-question
+      - name: anyThingElseWeShouldKnowAboutHourOrWageChange
+        type: TEXTAREA
+        promptMessage:
+          promptMessageFragmentName: changeInHoursAnythingElseFragment
   - &selfEmployed
     name: selfEmployed
     pageTitle: self-employed.title-you
@@ -3446,6 +3537,11 @@ workflow:
           pageName: changeType
           input: changeType
           value: newJob
+      - pageName: tellUsAboutChangeInHoursJob
+        condition:
+          pageName: changeType
+          input: changeType
+          value: hoursOrPayChanged
     groupName: changes
     datasources:
       - pageName: whoHadChange
@@ -3462,6 +3558,22 @@ workflow:
     datasources:
       - groupName: changes
         pageName: whoHadChange
+  tellUsAboutChangeInHoursJob:
+    pageConfiguration: *tellUsAboutChangeInHoursJob
+    groupName: changes
+    nextPages:
+      - pageName: tellUsAboutChangeInHours
+    datasources:
+      - groupName: changes
+        pageName: whoHadChange
+  tellUsAboutChangeInHours:
+    pageConfiguration: *tellUsAboutChangeInHours
+    groupName: changes
+    nextPages:
+      - pageName: prepareToApply
+    datasources:
+      - groupName: changes
+      - pageName: whoHadChange
   selfEmployed:
     pageConfiguration: *selfEmployed
     groupName: changes
