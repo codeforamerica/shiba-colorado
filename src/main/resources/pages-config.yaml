@@ -103,6 +103,11 @@ conditionDefinitions:
   - &applicantDidNotChooseCERTAINPOPS?
     <<: *applicantDidNotChooseProgram?
     value: CERTAIN_POPS
+  - &isNotApplyingForSelf
+    pageName: whoHadChange
+    input: whoHadChange
+    value: me
+    matcher: DOES_NOT_CONTAIN
   - &householdMemberDidNotChooseProgram?
     pageName: householdMemberInfo
     input: programs
@@ -812,6 +817,27 @@ pageDefinitions:
               messageKey: general.inputs.yes
             - value: "false"
               messageKey: general.inputs.no
+  - &wantACopy
+    name: wantACopy
+    pageTitle: want-a-copy.title
+    headerKey: want-a-copy.title
+    headerHelpMessageKey: want-a-copy.we-can-send
+    inputs:
+      - name: email
+        type: TEXT
+        promptMessage:
+          promptMessageKey: want-a-copy.email
+  - &signSubmit
+    name: signSubmit
+    pageTitle: sign-submit.title
+    headerKey: sign-submit.title
+    inputs:
+      - name: signature
+        type: TEXT
+        promptMessage:
+          promptMessageKey: sign-submit.by-entering-your-name
+        helpMessageKey: sign-submit.by-entering-your-name
+    primaryButtonTextKey: sign-submit.sign-and-submit
   - &goToApplyMn
     name: goToApplyMn
     pageTitle: go-to-apply-mn.title
@@ -3657,6 +3683,18 @@ workflow:
       - pageName: wantACopy
     datasources:
       - groupName: changes
+        pageName: whoHadChange
+    skipCondition: *isNotApplyingForSelf
+  wantACopy:
+    pageConfiguration: *wantACopy
+    nextPages:
+      - pageName: signSubmit
+  signSubmit:
+    pageConfiguration: *signSubmit
+    nextPages:
+      - pageName: success
+  success:
+    pageConfiguration: *success
   identifyCountyBeforeApplying:
     pageConfiguration: *identifyCounty
     nextPages:
@@ -4937,10 +4975,6 @@ workflow:
       - pageName: contactInfo
   feedback:
     pageConfiguration: *feedback
-  success:
-    pageConfiguration: *success
-    nextPages:
-      - pageName: feedback
   documentsSent:
     pageConfiguration: *documentsSent
 pageGroups:
@@ -4981,6 +5015,7 @@ landmarkPages:
   inProgressStatusPages: # Set application status to "in_progress"
     - choosePrograms
     - identifyCounty
+    - whoHadChange
   landingPages: # the home page of the app
     - landing
   postSubmitPages: # pages which are accessible after submitting an application, also all pages of the laterdocs flow
@@ -4999,5 +5034,5 @@ landmarkPages:
   nextStepsPage: nextSteps
   terminalPage: success # the final page of the main flow ("Done! Your application has been submitted.")
   laterDocsTerminalPage: documentsSent # the final page of the laterdocs flow
-  submitPage: signThisApplication
+  submitPage: signSubmit
   uploadDocumentsPage: uploadDocuments
