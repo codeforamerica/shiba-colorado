@@ -1,0 +1,9 @@
+<div th:fragment="textMessageConsentPromptFragment"
+     th:with="phoneNumber=${T(org.codeforamerica.shiba.pages.PageUtils).clientPhoneNumber(subworkflows)}">
+<!--  <p th:text="${phoneNumber}"></p>-->
+  <label class="form-question"
+         th:for="${input.name}"
+         th:id="${input.name + '-label'}"
+         th:utext="#{text-message-consent.message-num(${phoneNumber})}">
+  </label>
+</div>

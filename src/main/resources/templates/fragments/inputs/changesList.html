@@ -8,6 +8,7 @@
                                                      person=${isSelf ? 'you' : firstName + ' ' + lastName}">
       <p th:if="${changeType.equals('jobEnded')}" th:text="#{any-other-changes.reported-job-termination(${person})}"></p>
       <p th:if="${changeType.equals('newJob')}" th:text="#{any-other-changes.reported-new-job(${person})}"></p>
+      <p th:if="${changeType.equals('hoursOrPayChanged')}" th:text="#{any-other-changes.you-reported-change(${person})}"></p>
     </div>
   </th:block>
 </div>

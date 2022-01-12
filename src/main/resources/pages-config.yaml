@@ -780,8 +780,6 @@ pageDefinitions:
   - &addDocuments
     name: addDocuments
     pageTitle: add-documents.add-the-letter-or-paystubs
-
-  #    hasPrimaryButton: false
   - &anyOtherChanges
     name: anyOtherChanges
     pageTitle: any-other-changes.do-you-have-any-other-changes
@@ -798,6 +796,22 @@ pageDefinitions:
       - name: changesList
         type: CUSTOM
         customInputFragment: changesList
+  - &textMessageConsent
+    name: textMessageConsent
+    pageTitle: text-message-consent.title
+    headerKey: text-message-consent.title
+    headerHelpMessageKey: text-message-consent.all-official-notices
+    inputs:
+      - name: textConsent
+        type: RADIO
+        promptMessage:
+          promptMessageFragmentName: textMessageConsentPromptFragment
+        options:
+          selectableOptions:
+            - value: "true"
+              messageKey: general.inputs.yes
+            - value: "false"
+              messageKey: general.inputs.no
   - &goToApplyMn
     name: goToApplyMn
     pageTitle: go-to-apply-mn.title
@@ -3635,6 +3649,12 @@ workflow:
           input: anyOtherChanges
           value: "true"
       - pageName: textMessageConsent
+    datasources:
+      - groupName: changes
+  textMessageConsent:
+    pageConfiguration: *textMessageConsent
+    nextPages:
+      - pageName: wantACopy
     datasources:
       - groupName: changes
   identifyCountyBeforeApplying:

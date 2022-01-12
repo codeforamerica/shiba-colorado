@@ -4,10 +4,14 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.apache.commons.lang3.StringUtils;
 import org.codeforamerica.shiba.pages.data.DatasourcePages;
+import org.codeforamerica.shiba.pages.data.Iteration;
+import org.codeforamerica.shiba.pages.data.Subworkflow;
+import org.codeforamerica.shiba.pages.data.Subworkflows;
 
 public class PageUtils {
 
@@ -78,5 +82,13 @@ public class PageUtils {
     String[] fullNameParts = Arrays
         .copyOfRange(householdMemberInfo, 0, householdMemberInfo.length - 1);
     return StringUtils.join(fullNameParts, " ");
+  }
+
+  public static String clientPhoneNumber(Subworkflows subworkflows) {
+    Subworkflow changes = subworkflows.get("changes");
+    return changes.stream().filter(iteration ->
+        iteration.getPagesData().getPage("whoHadChange").get("whoHadChange").getValue(0)
+            .equals("me")).findFirst().map(iteration ->
+        iteration.getPagesData().getPage("clientInfo").get("phoneNumber").getValue(0)).orElse(":(");
   }
 }
