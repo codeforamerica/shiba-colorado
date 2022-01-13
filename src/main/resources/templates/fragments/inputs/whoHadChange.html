@@ -1,0 +1,70 @@
+<!-- Custom input for displaying household members in a checkbox. This needs to be custom because we're formatting the application data values that are displayed to the applicant on the screen -->
+<th:block th:fragment="whoHadChange (input, data)"
+          th:with="formInputName=${T(org.codeforamerica.shiba.pages.PageUtils).getFormInputName(input.name)},
+                   inputData=${data.get(input.name)},
+                   hasError=${!data.isValid() && !inputData.valid(data)},
+                   hasHelpMessage=${input.helpMessageKey != null},
+                   needsAriaLabel=${input.needsAriaLabel()}">
+  <div class="spacing-below-60 word-wrap-break-word">
+    <div role="group" aria-labelledby="page-header">
+
+      <fieldset>
+        <label th:for="householdMember-me" class="radio-button">
+          <input type="radio"
+                 th:id="householdMember-me"
+                 th:value="me"
+                 th:name="${formInputName}">
+          <span th:text="#{who-had-change.me}"></span>
+        </label>
+
+        <th:block
+            th:each="iteration, iterationStat: ${input.options.subworkflows.get('changes')}">
+          <label th:for="|householdMember${iterationStat.index}|"
+                 class="radio-button"
+                 th:if="${!iteration.getPagesData().get('whoHadChange').get('whoHadChange').value[0].equals('me')}"
+                 th:with="fullName=${iteration.getPagesData().get('clientInfo').get('firstName').value[0] + ' ' + iteration.getPagesData().get('clientInfo').get('lastName').value[0]}">
+            <input type="radio"
+                   th:id="|householdMember${iterationStat.index}|"
+                   th:value="${fullName} + ' ' + ${iteration.id}"
+                   th:name="${formInputName}"
+                   th:checked="${inputData.value.contains(fullName)}">
+            <span
+                th:text="|${iteration.getPagesData().get('clientInfo').get('firstName').value[0]}&nbsp;${iteration.getPagesData().get('clientInfo').get('lastName').value[0]}|"></span>
+          </label>
+        </th:block>
+
+        <label th:for="someoneElse" class="radio-button">
+          <input type="radio"
+                 th:id="someoneElse"
+                 th:value="someoneElse"
+                 th:name="${formInputName}">
+          <span th:text="#{who-had-change.someone-else}"></span>
+        </label>
+      </fieldset>
+
+      <!--      <select th:id="${input.name}"-->
+      <!--              class="select__element"-->
+      <!--              th:attr="aria-describedby=${hasHelpMessage ? input.name + '-help-message' : ''},-->
+      <!--                             aria-labelledby=${needsAriaLabel ? '' : input.name + '-label'},-->
+      <!--                             aria-invalid=${hasError},-->
+      <!--                             aria-label=${needsAriaLabel ? input.name : ''}"-->
+      <!--              th:name="${formInputName}"-->
+      <!--      >-->
+      <!--        <option th:id="householdMember-me"-->
+      <!--                th:value="me"-->
+      <!--                th:text="#{who-had-change.me}"-->
+      <!--                th:selected="${inputData.value.contains('me')}">-->
+
+      <!--        <option th:id="someoneElse"-->
+      <!--                th:value="someoneElse"-->
+      <!--                th:text="#{who-had-change.someone-else}"-->
+      <!--                th:selected="${inputData.value.contains('me')}">-->
+
+      <!--          &lt;!&ndash;        <th:block th:each="option: ${input.options.selectableOptions}">&ndash;&gt;-->
+      <!--          &lt;!&ndash;          <option th:value="${option.value}" th:text="#{${option.messageKey}}"&ndash;&gt;-->
+      <!--          &lt;!&ndash;                  th:selected="${inputData.value.contains(option.value)}"></option>&ndash;&gt;-->
+      <!--          &lt;!&ndash;        </th:block>&ndash;&gt;-->
+      <!--      </select>-->
+    </div>
+  </div>
+</th:block>

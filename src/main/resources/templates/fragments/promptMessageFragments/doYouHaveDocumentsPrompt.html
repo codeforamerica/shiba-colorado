@@ -2,7 +2,7 @@
 <html th:lang="${#locale.language}" xmlns:th="http://www.thymeleaf.org">
 <body>
 <div th:fragment="doYouHaveDocumentsPrompt" class="reveal reveal-adjacent spacing-below-60"
-     th:with="isApplyingForSomeoneElse=${pagesData.get('whoHadChange').get('whoHadChange').value[0].equals('someoneElse')},
+     th:with="isApplyingForSomeoneElse=${!pagesData.get('whoHadChange').get('whoHadChange').value[0].equals('me')},
               name=${pagesData.get('clientInfo').get('firstName').value[0]}">
     <a href="#" class="reveal__link reveal__link-adjacent">
         <div class="reveal__link__header-adjacent" th:text="#{do-you-have-documents.reveal-header}"></div>

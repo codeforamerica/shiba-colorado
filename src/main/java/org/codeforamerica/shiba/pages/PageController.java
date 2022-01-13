@@ -179,7 +179,7 @@ public class PageController {
     Condition skipCondition = nextPageWorkflow.getSkipCondition();
     if (skipCondition != null) {
       PagesData pagesData = applicationData.getDatasourceDataForPageIncludingSubworkflows(
-          nextPageWorkflow);
+          nextPageWorkflow); // but not including incomplete iterations probably
       DatasourcePages datasourcePages = new DatasourcePages(pagesData);
       return datasourcePages.satisfies(skipCondition);
     }

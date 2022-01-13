@@ -1,5 +1,5 @@
 <div th:fragment="changeInHoursAnythingElseFragment"
-     th:with="isApplyingForSomeoneElse=${pagesData.get('whoHadChange').get('whoHadChange').value[0].equals('someoneElse')},
+     th:with="isApplyingForSomeoneElse=${!pagesData.get('whoHadChange').get('whoHadChange').value[0].equals('me')},
               name=${pagesData.get('clientInfo').get('firstName').value[0]}">
   <label class="form-question"
          th:for="${input.name}"

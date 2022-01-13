@@ -7,7 +7,8 @@ conditionDefinitions:
   - &applyingForSomeoneElse?
     pageName: whoHadChange
     input: whoHadChange
-    value: someoneElse
+    matcher: CONTAINS_STRING_OTHER_THAN
+    value: me
   - &livesAlone?
     pageName: addHouseholdMembers
     input: addHouseholdMembers
@@ -298,13 +299,19 @@ pageDefinitions:
     headerKey: who-had-change.header
     inputs:
       - name: whoHadChange
-        type: RADIO
+        type: CUSTOM
+        customInputFragment: whoHadChange
         options:
-          selectableOptions:
-            - value: me
-              messageKey: who-had-change.me
-            - value: someoneElse
-              messageKey: who-had-change.someone-else
+          datasources:
+              - pageName: clientInfo
+                groupName: changes
+                optional: "true"
+  #        options:
+#          selectableOptions:
+#            - value: me
+#              messageKey: who-had-change.me
+#            - value: someoneElse
+#              messageKey: who-had-change.someone-else
   - &clientInfo
     name: clientInfo
     pageTitle:
@@ -3563,7 +3570,9 @@ workflow:
       - pageName: clientInfo
     groupName: changes
     datasources:
-      - groupName: changes
+      - pageName: clientInfo
+        groupName: changes
+        optional: "true"
   clientInfo:
     pageConfiguration: *clientInfo
     nextPages:
@@ -3585,6 +3594,17 @@ workflow:
     groupName: changes
     datasources:
       - pageName: whoHadChange
+    skipCondition:
+      conditions:
+        - pageName: whoHadChange
+          matcher: CONTAINS_STRING_OTHER_THAN
+          input: whoHadChange
+          value: me
+        - pageName: whoHadChange
+          matcher: CONTAINS_STRING_OTHER_THAN
+          input: whoHadChange
+          value: someoneElse
+
   tellUsAboutTheLostJob:
     pageConfiguration: *tellUsAboutTheLostJob
     nextPages:
